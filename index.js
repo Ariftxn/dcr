@@ -18,6 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(session({ secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: false }));
 app.use(express.static('public'));
 
+// Load vouchers
 let vouchers = [];
 if (fs.existsSync("vouchers.json")) vouchers = JSON.parse(fs.readFileSync("vouchers.json"));
 
@@ -32,7 +33,7 @@ function generateVoucherCode(length = 12) {
   return code;
 }
 
-// API untuk dashboard
+// API dashboard
 app.get("/api/roles", async (req, res) => {
   const guild = await client.guilds.fetch(process.env.GUILD_ID);
   await guild.roles.fetch();
