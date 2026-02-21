@@ -1,74 +1,15 @@
-/* Reset sederhana */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-/* Body */
-body {
-  background-color: #1e1e2f;
-  color: #f0f0f0;
-  padding: 20px;
-}
-
-/* Judul */
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
-  font-size: 2rem;
-  color: #00bfff;
-}
-
-/* Select, input, button */
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Tahoma, Verdana, sans-serif; }
+body { background:#1e1e2f; color:#f0f0f0; padding:20px; }
+h1 { text-align:center; margin-bottom:20px; font-size:2rem; color:#00bfff; }
 select, input[type="text"], input[type="number"], button {
-  width: 100%;
-  max-width: 400px;
-  margin: 10px auto;
-  display: block;
-  padding: 10px;
-  border-radius: 8px;
-  border: none;
-  font-size: 1rem;
+  width:100%; max-width:400px; margin:10px auto; display:block; padding:10px; border-radius:8px; border:none; font-size:1rem;
 }
-
-/* Input dan select */
-select, input[type="text"], input[type="number"] {
-  background-color: #2e2e3e;
-  color: #fff;
-}
-
-/* Button */
-button {
-  background-color: #00bfff;
-  color: #fff;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-button:hover {
-  background-color: #009acd;
-}
-
-/* List voucher */
-ul {
-  list-style: none;
-  max-width: 600px;
-  margin: 20px auto;
-}
-
-ul li {
-  background-color: #2e2e3e;
-  padding: 10px 15px;
-  margin-bottom: 10px;
-  border-radius: 8px;
-  word-break: break-word;
-}
-
-/* Responsive untuk mobile */
-@media (max-width: 480px) {
-  h1 { font-size: 1.5rem; }
-  select, input, button { font-size: 0.9rem; }
-  ul li { font-size: 0.9rem; }
-}
+select, input { background:#2e2e3e; color:#fff; }
+button { background:#00bfff; color:#fff; cursor:pointer; transition:0.3s; }
+button:hover { background:#009acd; }
+table { width:100%; max-width:700px; margin:20px auto; border-collapse:collapse; background:#2e2e3e; color:#fff; border-radius:10px; overflow:hidden; }
+table th, table td { padding:12px 15px; text-align:left; }
+table thead { background:#00bfff; color:#fff; }
+table tbody tr:nth-child(even){background:#3a3a4d;}
+table tbody tr:hover{background:#44445a;}
+@media(max-width:480px){ h1{font-size:1.5rem;} select,input,button{font-size:0.9rem;} table th,table td{padding:8px 10px;font-size:0.85rem;} }
