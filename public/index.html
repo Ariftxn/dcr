@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,6 +30,7 @@
 async function fetchRoles() {
   const roles = await fetch("/api/roles").then(r=>r.json());
   const select = document.getElementById("roleSelect");
+  select.innerHTML = "";
   roles.forEach(r=>{ const o=document.createElement("option"); o.value=r.id; o.textContent=r.name; select.appendChild(o); });
 }
 
