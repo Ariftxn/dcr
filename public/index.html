@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ultimate Dashboard Voucher</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h1>Voucher Dashboard</h1>
+
+<section id="create-voucher">
+  <h2>Buat Voucher Baru</h2>
+  <form id="voucher-form">
+    <input type="text" id="code" placeholder="Kode Voucher" required>
+    <input type="text" id="roleId" placeholder="Role ID" required>
+    <button type="submit">Buat Voucher</button>
+  </form>
+</section>
+
+<section id="voucher-list">
+  <h2>Daftar Voucher</h2>
+  <input type="text" id="search" placeholder="Cari kode / user tag">
+  <table>
+    <thead>
+      <tr>
+        <th>Kode</th>
+        <th>Role</th>
+        <th>Status</th>
+        <th>Redeemed By</th>
+      </tr>
+    </thead>
+    <tbody id="vouchers"></tbody>
+  </table>
+</section>
+
+<script>
+async function fetchVouchers() {
+  const res = await fetch("/voucher/list");
+  const vouchers = await res.json();
+  const tbody = document.getElementById("vouchers");
+  tbody.innerHTML = "";
+
+  vouchers.forEach(v => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${v.code}</td>
+      <td>${v.roleId}</td>
+      <td>${v.active ? "Active" : "Inactive"}</td>
+      <td>${v.redeemedBy.map(id => `<span>@${id}</span>`).join(", ")}</td>
+    `;
+    tbody.appendChild(row);
+  });
+}
+
+document.getElementById("voucher-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const code = document.getElementById("code").value;
+  const roleId = document.getElementById("roleId").value;
+
+  await fetch("/voucher/create", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ code, roleId })
+  });
+
+  document.getElementById("code").value = "";
+  document.getElementById("roleId").value = "";
+  fetchVouchers();
+});
+
+document.getElementById("search").addEventListener("input", async e => {
+  const term = e.target.value.toLowerCase();
+  const res = await fetch("/voucher/list");
+  const vouchers = await res.json();
+  const tbody = document.getElementById("vouchers");
+  tbody.innerHTML = "";
+
+  vouchers.filter(v => v.code.toLowerCase().includes(term) || v.redeemedBy.some(id => id.includes(term)))
+          .forEach(v => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${v.code}</td>
+      <td>${v.roleId}</td>
+      <td>${v.active ? "Active" : "Inactive"}</td>
+      <td>${v.redeemedBy.map(id => `<span>@${id}</span>`).join(", ")}</td>
+    `;
+    tbody.appendChild(row);
+  });
+});
+
+fetchVouchers();
+</script>
+</body>
+</html>
