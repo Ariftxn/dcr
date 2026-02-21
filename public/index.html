@@ -8,34 +8,59 @@
 </head>
 <body>
 <h1>Voucher Dashboard</h1>
+
 <select id="roleSelect"></select>
-<input type="text" id="codeInput" placeholder="Kode (auto-generate if empty)">
+<input type="text" id="codeInput" placeholder="Kode (kosong = auto-generate)">
 <input type="number" id="maxInput" placeholder="Max Redeem" value="1">
 <button id="createBtn">Buat Voucher</button>
-<ul id="voucherList"></ul>
+
+<table id="voucherTable">
+  <thead>
+    <tr>
+      <th>Kode</th>
+      <th>Role</th>
+      <th>Redeemed</th>
+      <th>Max Redeem</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
 <script>
 async function fetchRoles() {
   const roles = await fetch("/api/roles").then(r=>r.json());
   const select = document.getElementById("roleSelect");
   roles.forEach(r=>{ const o=document.createElement("option"); o.value=r.id; o.textContent=r.name; select.appendChild(o); });
 }
+
 async function fetchVouchers() {
-  const list = document.getElementById("voucherList");
-  list.innerHTML="";
+  const tbody = document.querySelector("#voucherTable tbody");
+  tbody.innerHTML = "";
   const vouchers = await fetch("/api/vouchers").then(r=>r.json());
   vouchers.forEach(v=>{
-    const li=document.createElement("li");
-    li.textContent=`${v.code} | Role: ${v.roleId} | Redeemed: ${v.redeemed.length}/${v.maxRedeem}`;
-    list.appendChild(li);
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${v.code}</td>
+      <td>${v.roleId}</td>
+      <td>${v.redeemed.length}</td>
+      <td>${v.maxRedeem}</td>
+    `;
+    tbody.appendChild(tr);
   });
 }
+
 document.getElementById("createBtn").onclick = async ()=>{
-  const roleId=document.getElementById("roleSelect").value;
-  const code=document.getElementById("codeInput").value;
-  const maxRedeem=document.getElementById("maxInput").value;
-  await fetch("/api/vouchers",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({roleId,code,maxRedeem,autoGenerate:!code})});
+  const roleId = document.getElementById("roleSelect").value;
+  const code = document.getElementById("codeInput").value;
+  const maxRedeem = document.getElementById("maxInput").value;
+  await fetch("/api/vouchers",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({roleId, code, maxRedeem, autoGenerate:!code})
+  });
   fetchVouchers();
 };
+
 fetchRoles();
 fetchVouchers();
 </script>
